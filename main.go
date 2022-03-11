@@ -109,13 +109,10 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 }
 func handleFunc() {
 	port := os.Getenv("PORT")
-	rout := mux.NewRouter()
-	rout.HandleFunc("/", index)
-	rout.HandleFunc("/create", create)
-	rout.HandleFunc("/save_article", save_article)
-	rout.HandleFunc("/post/{id:[0-9]+}", wiewPost)
-
-	http.Handle("/", rout)
+	http.HandleFunc("/", index)
+	http.HandleFunc("/create", create)
+	http.HandleFunc("/save_article", save_article)
+	http.HandleFunc("/post/{id:[0-9]+}", wiewPost)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	http.ListenAndServe(":"+port, nil)
 }
