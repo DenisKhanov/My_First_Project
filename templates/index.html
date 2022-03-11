@@ -1,0 +1,24 @@
+{{ define "index" }}
+{{ template "header" }}
+<main role="main" class="inner cover">
+    <div>
+    <h1 class="cover-heading">Приветствую тебя, мой читатель!</h1>
+    <p class="lead"> Этот текст не несет какого-либо смысла и находится тут только для исключения пустого места
+        на странице!</p>
+    {{ range. }}
+    <div class="alert alert-danger">
+        <h2>{{.Title}}</h2>
+        <p>{{.Anons}}</p>
+        <a href="/post/{{.Id}}" class="btn btn-danger"> Read me</a>
+    </div>
+    {{else}}
+    <p class="lead">Тут совсем пусто</p>
+    {{end}}
+
+    <p class="lead">
+        <a href="#" class="btn btn-lg btn-secondary ">Функционал этой кнопки еще не прописан :(</a>
+    </p>
+    </div>
+</main>
+{{ template "footer" }}
+{{ end }}
