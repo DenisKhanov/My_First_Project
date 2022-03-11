@@ -133,7 +133,7 @@ import (
 )
 
 func hi(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello World!")
+	io.WriteString(w, "Hello World! Это первый залив тестового проекта на удаленный сервер!")
 }
 
 func main() {
