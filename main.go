@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"os"
 	//"os"
 )
 
@@ -108,7 +109,7 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 	tmp.ExecuteTemplate(w, "show", showPost)
 }
 func handleFunc() {
-	//port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 	rout.HandleFunc("/", index).Methods("GET")
 	rout.HandleFunc("/create", create).Methods("GET")
@@ -117,7 +118,7 @@ func handleFunc() {
 
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+port, nil)
 }
 func main() {
 	handleFunc()
