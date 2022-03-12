@@ -7,7 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
-	"os"
+	//"os"
 )
 
 type Article struct {
@@ -23,7 +23,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
-	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
+	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func save_article(w http.ResponseWriter, r *http.Request) {
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprintf(w, "Не должно быть пустых строк!")
 	} else {
-		db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
+		db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
 		if err != nil {
 			panic(err)
 		}
@@ -85,7 +85,7 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, err.Error())
 	}
 
-	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
+	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
 	if err != nil {
 		panic(err)
 	}
@@ -108,7 +108,7 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 	tmp.ExecuteTemplate(w, "show", showPost)
 }
 func handleFunc() {
-	port := os.Getenv("PORT")
+	//port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 	rout.HandleFunc("/", index).Methods("GET")
 	rout.HandleFunc("/create", create).Methods("GET")
@@ -117,7 +117,7 @@ func handleFunc() {
 
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	http.ListenAndServe(":"+port, nil)
+	http.ListenAndServe(":8080", nil)
 }
 func main() {
 	handleFunc()
