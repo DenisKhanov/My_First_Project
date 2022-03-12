@@ -126,6 +126,8 @@ func main() {
 //package main
 //
 //import (
+//	"database/sql"
+//	"fmt"
 //	"io"
 //	"net/http"
 //	"os"
@@ -139,4 +141,29 @@ func main() {
 //	port := os.Getenv("PORT")
 //	http.HandleFunc("/", hi)
 //	http.ListenAndServe(":"+port, nil)
+//}
+
+//package main
+//
+//import (
+//	"database/sql"
+//	"fmt"
+//	_ "github.com/go-sql-driver/mysql"
+//)
+//
+//func main() {
+//	//db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/myproject")
+//	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
+//
+//	if err != nil {
+//		panic(err)
+//	}
+//	defer db.Close()
+//
+//	res, err := db.Query(fmt.Sprintf("SELECT * FROM `articles` WHERE `id` = '%s'", "id"))
+//	if err != nil {
+//		panic(err)
+//	} else {
+//		fmt.Println(res)
+//	}
 //}
