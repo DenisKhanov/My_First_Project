@@ -23,7 +23,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/myproject")
+	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
 	if err != nil {
 		panic(err)
 	}
@@ -61,7 +61,7 @@ func save_article(w http.ResponseWriter, r *http.Request) {
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprintf(w, "Не должно быть пустых строк!")
 	} else {
-		db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/myproject")
+		db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
 		if err != nil {
 			panic(err)
 		}
@@ -85,7 +85,7 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, err.Error())
 	}
 
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/myproject")
+	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(217.182.197.234:3306)/articles")
 	if err != nil {
 		panic(err)
 	}
