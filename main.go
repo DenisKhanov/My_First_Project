@@ -129,26 +129,6 @@ func main() {
 //import (
 //	"database/sql"
 //	"fmt"
-//	"io"
-//	"net/http"
-//	"os"
-//)
-//
-//func hi(w http.ResponseWriter, r *http.Request) {
-//	io.WriteString(w, "Hello World! Это первый залив тестового проекта на удаленный сервер!")
-//}
-//
-//func main() {
-//	port := os.Getenv("PORT")
-//	http.HandleFunc("/", hi)
-//	http.ListenAndServe(":"+port, nil)
-//}
-
-//package main
-//
-//import (
-//	"database/sql"
-//	"fmt"
 //	_ "github.com/go-sql-driver/mysql"
 //)
 //
