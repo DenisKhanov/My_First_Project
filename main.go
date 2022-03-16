@@ -1,14 +1,13 @@
 package main
 
 import (
-	"database/sql"
+	"WWWgo/db"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
 	"os"
-	//"os"
 )
 
 type Article struct {
@@ -24,14 +23,10 @@ func index(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
-	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
 
 	//Выборка данных
-	res, err := db.Query("SELECT * FROM `articles`")
+	defer db.DbConnect().Close()
+	res, err := db.DbConnect().Query("SELECT * FROM `articles`")
 	if err != nil {
 		panic(err)
 	}
@@ -62,13 +57,9 @@ func save_article(w http.ResponseWriter, r *http.Request) {
 	if title == "" || anons == "" || full_text == "" {
 		fmt.Fprintf(w, "Не должно быть пустых строк!")
 	} else {
-		db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
-		if err != nil {
-			panic(err)
-		}
-		defer db.Close()
 		//Добавление данных
-		insert, err := db.Query(fmt.Sprintf("INSERT INTO `articles` (`title`,`anons`,`full_text`) VALUES('%s','%s','%s')", title, anons, full_text))
+		defer db.DbConnect().Close()
+		insert, err := db.DbConnect().Query(fmt.Sprintf("INSERT INTO `articles` (`title`,`anons`,`full_text`) VALUES('%s','%s','%s')", title, anons, full_text))
 		if err != nil {
 			panic(err)
 		}
@@ -85,14 +76,8 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Fprintf(w, err.Error())
 	}
-
-	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
-	if err != nil {
-		panic(err)
-	}
-	defer db.Close()
-
-	res, err := db.Query(fmt.Sprintf("SELECT * FROM `articles` WHERE `id` = '%s'", vars["id"]))
+	defer db.DbConnect().Close()
+	res, err := db.DbConnect().Query(fmt.Sprintf("SELECT * FROM `articles` WHERE `id` = '%s'", vars["id"]))
 	if err != nil {
 		panic(err)
 	}
@@ -124,27 +109,75 @@ func main() {
 	handleFunc()
 }
 
+//
 //package main
 //
 //import (
-//	"database/sql"
+//	"WWWgo/db"
+//	"bufio"
 //	"fmt"
 //	_ "github.com/go-sql-driver/mysql"
+//	"os"
 //)
 //
-//func main() {
-//	//db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/myproject")
-//	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
+//type articles struct {
+//	id                      int
+//	title, anons, full_text string
+//}
 //
+//func reduct_title() {
+//	//Редактирование данных в таблице
+//	defer db.DbConnect().Close()
+//	var numId int
+//	fmt.Println("Enter id and his new title...")
+//	fmt.Scan(&numId)
+//	bio := bufio.NewReader(os.Stdin)
+//	newTitle, _, _ := bio.ReadLine()
+//	res, err := db.DbConnect().Exec(fmt.Sprintf("UPDATE articles SET `title`='%s' WHERE `id`= '%d'", newTitle, numId))
 //	if err != nil {
 //		panic(err)
 //	}
-//	defer db.Close()
+//	res.LastInsertId()
+//}
 //
-//	res, err := db.Query(fmt.Sprintf("SELECT * FROM `articles` WHERE `id` = '%s'", "id"))
+//func wiew_db_info() {
+//	//Выводим данные всей базы данных
+//	defer db.DbConnect().Close()
+//	res, err := db.DbConnect().Query("SELECT * FROM `articles`")
+//	if err != nil {
+//		panic(err)
+//	}
+//	defer res.Close()
+//	informations := []articles{}
+//
+//	for res.Next() {
+//		inf := articles{}
+//		err := res.Scan(&inf.id, &inf.title, &inf.anons, &inf.full_text)
+//		if err != nil {
+//			fmt.Println(err, "Attention,it's error!")
+//			continue
+//		}
+//		informations = append(informations, inf)
+//	}
+//	for _, inf := range informations {
+//		fmt.Printf(" Id        %d\n Title     %s\n Anons     %s\n Full_text %s\n\n",
+//			inf.id, inf.title, inf.anons, inf.full_text)
+//	}
+//}
+//
+//func main() {
+//	reduct_title()
+//	wiew_db_info()
+//}
+
+//Выводим только одну строку из базы данных
+//	res := db.QueryRow("SELECT * FROM articles WHERE id=2")
+//	inf := articles{}
+//	err = res.Scan(&inf.id, &inf.title, &inf.anons, &inf.full_text)
 //	if err != nil {
 //		panic(err)
 //	} else {
-//		fmt.Println(res)
+//		fmt.Printf(" Id        %d\n Title     %s\n Anons     %s\n Full_text %s\n\n",
+//			inf.id, inf.title, inf.anons, inf.full_text)
 //	}
 //}
