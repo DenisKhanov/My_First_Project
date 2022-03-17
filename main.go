@@ -15,6 +15,11 @@ type Article struct {
 	Title, Anons, FullText string
 }
 
+//type Users struct {
+//	Id              int
+//	Login, Password string
+//}
+
 var posts = []Article{}
 var showPost = Article{}
 
@@ -42,6 +47,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	tmp.ExecuteTemplate(w, "index", posts)
 
 }
+
 func create(w http.ResponseWriter, r *http.Request) {
 	tmp, err := template.ParseFiles("templates/create.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
@@ -68,6 +74,7 @@ func save_article(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 }
+
 func wiewPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
@@ -93,10 +100,52 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 	}
 	tmp.ExecuteTemplate(w, "show", showPost)
 }
-func handleFunc() {
+func reduct_story(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Yes, it's working!")
+}
+
+func register_new_user(w http.ResponseWriter, r *http.Request) {
+	tmp, err := template.ParseFiles("templates/login.html", "templates/header.html", "templates/footer.html")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+	tmp.ExecuteTemplate(w, "login", nil)
+}
+func add_user(w http.ResponseWriter, r *http.Request) {
+	login := r.FormValue("login")
+	password := r.FormValue("password")
+
+	if login == "" || password == "" {
+		fmt.Fprintf(w, "Логин и пароль не могут быть пустыми")
+	} else {
+		//Добавление данных
+		defer db.DbConnect().Close()
+		insert, err := db.DbConnect().Query(fmt.Sprintf("INSERT INTO `autentification` (`login`,`password`) VALUES('%s','%s')", login, password))
+		if err != nil {
+			panic(err)
+		}
+		defer insert.Close()
+
+		http.Redirect(w, r, "/ok", http.StatusSeeOther)
+	}
+}
+
+func status_registration(w http.ResponseWriter, r *http.Request) {
+	tmp, err := template.ParseFiles("templates/ok.html", "templates/header.html", "templates/footer.html")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+	tmp.ExecuteTemplate(w, "ok", nil)
+}
+
+func handleFuncs() {
 	port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 	rout.HandleFunc("/", index).Methods("GET")
+
+	rout.HandleFunc("/login", register_new_user).Methods("GET")
+	rout.HandleFunc("/add_user", add_user).Methods("POST")
+	rout.HandleFunc("/ok", status_registration).Methods("GET")
 	rout.HandleFunc("/create", create).Methods("GET")
 	rout.HandleFunc("/save_article", save_article).Methods("POST")
 	rout.HandleFunc("/post/{id:[0-9]+}", wiewPost).Methods("GET")
@@ -104,9 +153,10 @@ func handleFunc() {
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	http.ListenAndServe(":"+port, nil)
+	//http.ListenAndServe(":8080", nil)
 }
 func main() {
-	handleFunc()
+	handleFuncs()
 }
 
 //

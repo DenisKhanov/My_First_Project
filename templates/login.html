@@ -1,0 +1,14 @@
+{{ define "login" }}
+{{ template "header" }}
+<main role="main" class="inner cover">
+    <h1 class="cover-handing">Registration new user</h1>
+    <form action="/add_user" method="post">
+        <input type="text" name="login" id="login" placeholder="Придумайте себе логин"
+               class="form-control"><br>
+        <textarea name="password" id="password" class="form-control"
+                  placeholder="Придумайте пароль"></textarea><br>
+        <button class="btn btn-warning">Создать учетную запись</button>
+    </form>
+</main>
+{{ template "footer" }}
+{{ end }}
