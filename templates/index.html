@@ -2,23 +2,22 @@
 {{ template "header" }}
 <main role="main" class="inner cover">
     <div>
-    <h1 class="cover-heading">Приветствую тебя, мой читатель!</h1>
-    <p class="lead"> Этот текст не несет какого-либо смысла и находится тут только для исключения пустого места
-        на странице!</p>
-    {{ range. }}
-    <div class="alert alert-danger">
-        <h2>#{{.Id}}</h2>
-        <h2>{{.Title}}</h2>
-        <p>{{.Anons}}</p>
-        <a href="/post/{{.Id}}" class="btn btn-danger"> Read me</a>
-    </div>
-    {{else}}
-    <p class="lead">Тут совсем пусто</p>
-    {{end}}
-
-    <p class="lead">
-        <a href="#" class="btn btn-lg btn-secondary ">Не тыкается пока :(</a>
-    </p>
+        <h3 class="cover-heading mb-4">Приветствую тебя, мой читатель!</h3>
+        <p class="lead mb-4"> Этот текст не несет какого-либо смысла и находится тут только для исключения пустого места
+            на странице!</p>
+        {{ range. }}
+        <div class="jumbotron">
+            <h4 class="display-6"> {{.Title}}</h4>
+            <p class="lead">{{.Anons}}</p>
+            <p class="lead">
+                <a class="btn btn-info" href="/post/{{.Id}}" role="button">Прочитать подробнее</a>
+            </p>
+            <hr class="my-4">
+        </div>
+        {{else}}
+        <p class="lead">Тут совсем пусто, добавьте хоть одну статью :)</p>
+        <a href="/create" class="btn btn-lg btn-success ">Создать статью</a>
+        {{end}}
     </div>
 </main>
 {{ template "footer" }}
