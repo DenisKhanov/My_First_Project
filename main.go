@@ -2,12 +2,13 @@ package main
 
 import (
 	"WWWgo/db"
-	"encoding/json"
+	//"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"os"
 )
 
 type Article struct {
@@ -24,40 +25,40 @@ var posts = []Article{}
 var showPost = Article{}
 
 //Эксперименты с Json
-type UserRequest struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
-	Age   int    `json:"age"`
-	Sex   string `json:"sex"`
-}
+//type UserRequest struct {
+//	Name  string `json:"name"`
+//	Email string `json:"email"`
+//	Age   int    `json:"age"`
+//	Sex   string `json:"sex"`
+//}
+//
+//var user1 = Users{2, "Denis", "123123124"}
+//var userRec = UserRequest{"Ivan", "fafaasad@mail.ru", 32, "male"}
+//
+//type Test_struct struct {
+//	Test   string `json:"test"`
+//	Number int    `json:"number"`
+//}
+//
+//var testt = Test_struct{}
+//
+//func outputJson(w http.ResponseWriter, r *http.Request) {
+//	w.Header().Add("Content-Type", "application/json")
+//	json.NewEncoder(w).Encode(userRec)
+//	json.NewEncoder(w).Encode(user1)
+//}
+//func inputJson(w http.ResponseWriter, r *http.Request) {
+//fmt.Fprintf(w, r.Body)
+//json.NewDecoder(r.Body).Decode(&testt)
+//w.Header().Add("Content-Type", "application/json")
+//json.NewEncoder(w).Encode(testt)
+//jsonString := `{"test":"asdasds","number":123}`
+//err := json.Unmarshal([]byte(jsonString), &testt)
+//if err != nil {
+//	fmt.Println(err)
+//}
 
-var user1 = Users{2, "Denis", "123123124"}
-var userRec = UserRequest{"Ivan", "fafaasad@mail.ru", 32, "male"}
-
-type Test_struct struct {
-	Test   string `json:"test"`
-	Number int    `json:"number"`
-}
-
-var testt = Test_struct{}
-
-func outputJson(w http.ResponseWriter, r *http.Request) {
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userRec)
-	json.NewEncoder(w).Encode(user1)
-}
-func inputJson(w http.ResponseWriter, r *http.Request) {
-	//fmt.Fprintf(w, r.Body)
-	json.NewDecoder(r.Body).Decode(&testt)
-	w.Header().Add("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(testt)
-	//jsonString := `{"test":"asdasds","number":123}`
-	//err := json.Unmarshal([]byte(jsonString), &testt)
-	//if err != nil {
-	//	fmt.Println(err)
-	//}
-
-}
+//}
 
 //------------------------------------------------------------------------------------------------
 
@@ -197,8 +198,8 @@ func verification(w http.ResponseWriter, r *http.Request) {
 
 	if login == "" || password == "" {
 		fmt.Fprintf(w, "Это все не то!")
-		//status := "Поля логин или пароль не могут быть пустыми"
-		//tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+		status := "Поля логин или пароль не могут быть пустыми"
+		tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
 	} else {
 		//Вытягивание строки из БД по логину и проверка с введенным паролем
 		res := db.DbConnect().QueryRow(fmt.Sprintf("SELECT * FROM `autentification` WHERE `login`='%s'", login))
@@ -221,11 +222,11 @@ func verification(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleFuncs() {
-	//port := os.Getenv("PORT")
+	port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 
-	rout.HandleFunc("/output", outputJson)
-	rout.HandleFunc("/input", inputJson)
+	//rout.HandleFunc("/output", outputJson)
+	//rout.HandleFunc("/input", inputJson)
 
 	rout.HandleFunc("/", index).Methods("GET")
 
@@ -241,8 +242,8 @@ func handleFuncs() {
 
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	//http.ListenAndServe(":"+port, nil)
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":"+port, nil)
+	//http.ListenAndServe(":8080", nil)
 }
 func main() {
 	handleFuncs()
