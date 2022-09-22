@@ -2,14 +2,12 @@ package main
 
 import (
 	"WWWgo/db"
-	"os"
-
-	//"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
+	"os"
 )
 
 type Article struct {
@@ -24,44 +22,6 @@ type Users struct {
 
 var posts = []Article{}
 var showPost = Article{}
-
-//Эксперименты с Json
-//type UserRequest struct {
-//	Name  string `json:"name"`
-//	Email string `json:"email"`
-//	Age   int    `json:"age"`
-//	Sex   string `json:"sex"`
-//}
-//
-//var user1 = Users{2, "Denis", "123123124"}
-//var userRec = UserRequest{"Ivan", "fafaasad@mail.ru", 32, "male"}
-//
-//type Test_struct struct {
-//	Test   string `json:"test"`
-//	Number int    `json:"number"`
-//}
-//
-//var testt = Test_struct{}
-//
-//func outputJson(w http.ResponseWriter, r *http.Request) {
-//	w.Header().Add("Content-Type", "application/json")
-//	json.NewEncoder(w).Encode(userRec)
-//	json.NewEncoder(w).Encode(user1)
-//}
-//func inputJson(w http.ResponseWriter, r *http.Request) {
-//fmt.Fprintf(w, r.Body)
-//json.NewDecoder(r.Body).Decode(&testt)
-//w.Header().Add("Content-Type", "application/json")
-//json.NewEncoder(w).Encode(testt)
-//jsonString := `{"test":"asdasds","number":123}`
-//err := json.Unmarshal([]byte(jsonString), &testt)
-//if err != nil {
-//	fmt.Println(err)
-//}
-
-//}
-
-//------------------------------------------------------------------------------------------------
 
 func index(w http.ResponseWriter, r *http.Request) {
 	tmp, err := template.ParseFiles("templates/index.html", "templates/header.html", "templates/footer.html")
@@ -226,9 +186,6 @@ func handleFuncs() {
 	port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 
-	//rout.HandleFunc("/output", outputJson)
-	//rout.HandleFunc("/input", inputJson)
-
 	rout.HandleFunc("/", index).Methods("GET")
 
 	rout.HandleFunc("/autorisation", check).Methods("GET")
@@ -244,99 +201,7 @@ func handleFuncs() {
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	http.ListenAndServe(":"+port, nil)
-	http.ListenAndServe(":8080", nil)
 }
 func main() {
 	handleFuncs()
 }
-
-//Статусы выполнения
-//func status_registration(w http.ResponseWriter, r *http.Request) {
-//	tmp, err := template.ParseFiles("templates/ok.html", "templates/header.html", "templates/footer.html")
-//	if err != nil {
-//		fmt.Fprintf(w, err.Error())
-//	}
-//	tmp.ExecuteTemplate(w, "ok", nil)
-//}
-//func error_autorisatin(w http.ResponseWriter, r *http.Request) {
-//	tmp, err := template.ParseFiles("templates/error.html", "templates/header.html", "templates/footer.html")
-//	if err != nil {
-//		fmt.Fprintf(w, err.Error())
-//	}
-//	tmp.ExecuteTemplate(w, "error", nil)
-//}
-//rout.HandleFunc("/ok", status_registration).Methods("GET")
-//rout.HandleFunc("/error", error_autorisatin).Methods("GET")
-
-//
-//package main
-//
-//import (
-//	"WWWgo/db"
-//	"bufio"
-//	"fmt"
-//	_ "github.com/go-sql-driver/mysql"
-//	"os"
-//)
-//
-//type articles struct {
-//	id                      int
-//	title, anons, full_text string
-//}
-//
-//func reduct_title() {
-//	//Редактирование данных в таблице
-//	defer db.DbConnect().Close()
-//	var numId int
-//	fmt.Println("Enter id and his new title...")
-//	fmt.Scan(&numId)
-//	bio := bufio.NewReader(os.Stdin)
-//	newTitle, _, _ := bio.ReadLine()
-//	res, err := db.DbConnect().Exec(fmt.Sprintf("UPDATE articles SET `title`='%s' WHERE `id`= '%d'", newTitle, numId))
-//	if err != nil {
-//		panic(err)
-//	}
-//	res.LastInsertId()
-//}
-//
-//func wiew_db_info() {
-//	//Выводим данные всей базы данных
-//	defer db.DbConnect().Close()
-//	res, err := db.DbConnect().Query("SELECT * FROM `articles`")
-//	if err != nil {
-//		panic(err)
-//	}
-//	defer res.Close()
-//	informations := []articles{}
-//
-//	for res.Next() {
-//		inf := articles{}
-//		err := res.Scan(&inf.id, &inf.title, &inf.anons, &inf.full_text)
-//		if err != nil {
-//			fmt.Println(err, "Attention,it's error!")
-//			continue
-//		}
-//		informations = append(informations, inf)
-//	}
-//	for _, inf := range informations {
-//		fmt.Printf(" Id        %d\n Title     %s\n Anons     %s\n Full_text %s\n\n",
-//			inf.id, inf.title, inf.anons, inf.full_text)
-//	}
-//}
-//
-//func main() {
-//	reduct_title()
-//	wiew_db_info()
-//}
-
-//Выводим только одну строку из базы данных
-//	res := db.QueryRow("SELECT * FROM articles WHERE id=2")
-//	inf := articles{}
-//	err = res.Scan(&inf.id, &inf.title, &inf.anons, &inf.full_text)
-//	if err != nil {
-//		panic(err)
-//	} else {
-//		fmt.Printf(" Id        %d\n Title     %s\n Anons     %s\n Full_text %s\n\n",
-//			inf.id, inf.title, inf.anons, inf.full_text)
-//	}
-//}
