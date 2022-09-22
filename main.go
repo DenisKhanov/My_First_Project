@@ -2,13 +2,14 @@ package main
 
 import (
 	"WWWgo/db"
+	"os"
+
 	//"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"html/template"
 	"net/http"
-	"os"
 )
 
 type Article struct {
@@ -243,7 +244,7 @@ func handleFuncs() {
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 	http.ListenAndServe(":"+port, nil)
-	//http.ListenAndServe(":8080", nil)
+	http.ListenAndServe(":8080", nil)
 }
 func main() {
 	handleFuncs()
