@@ -1,0 +1,11 @@
+{{ define "blank" }}
+{{ template "header" }}
+<main role="main" class="inner cover">
+    <h1 class="cover-heading">Все поля должны быть заполнены!</h1>
+    <p class="cover-heading">{{.Status}}</p>
+    <p class="lead">
+        <a href="/create" class="btn btn-lg btn-success ">Вернуться</a>
+    </p>
+</main>
+{{ template "footer" }}
+{{ end }}

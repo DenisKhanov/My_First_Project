@@ -2,8 +2,6 @@ package main
 
 import (
 	"WWWgo/db"
-	"os"
-
 	//"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
@@ -97,12 +95,17 @@ func create(w http.ResponseWriter, r *http.Request) {
 	tmp.ExecuteTemplate(w, "create", nil)
 }
 func save_article(w http.ResponseWriter, r *http.Request) {
+	tmp, err := template.ParseFiles("templates/blank.html", "templates/header.html", "templates/footer.html")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+
 	title := r.FormValue("title")
 	anons := r.FormValue("anons")
 	full_text := r.FormValue("full_text")
 
 	if title == "" || anons == "" || full_text == "" {
-		fmt.Fprintf(w, "Не должно быть пустых строк!")
+		tmp.ExecuteTemplate(w, "blank", nil)
 	} else {
 		//Добавление данных
 		defer db.DbConnect().Close()
@@ -165,7 +168,8 @@ func add_user(w http.ResponseWriter, r *http.Request) {
 	defer db.DbConnect().Close()
 	if len(login) < 4 || len(password) < 4 {
 		status := "Логин и пароль не могут быть менее 4 символов"
-		tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+		page := "/login"
+		tmp.ExecuteTemplate(w, "error", struct{ Status, Page string }{Status: status, Page: page})
 	} else if err != nil {
 		//Добавление данных
 		insert, erro := db.DbConnect().Query(fmt.Sprintf("INSERT INTO `autentification` (`login`,`password`) VALUES('%s','%s')", login, password))
@@ -177,7 +181,8 @@ func add_user(w http.ResponseWriter, r *http.Request) {
 		tmp.ExecuteTemplate(w, "ok", struct{ Status string }{Status: status})
 	} else {
 		status := fmt.Sprintf("Пользователь %s уже зарегистрирован", login)
-		tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+		page := "/login"
+		tmp.ExecuteTemplate(w, "error", struct{ Status, Page string }{Status: status, Page: page})
 	}
 }
 
@@ -198,9 +203,9 @@ func verification(w http.ResponseWriter, r *http.Request) {
 	password := r.FormValue("password")
 
 	if login == "" || password == "" {
-		fmt.Fprintf(w, "Это все не то!")
 		status := "Поля логин или пароль не могут быть пустыми"
-		tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+		page := "/autorisation"
+		tmp.ExecuteTemplate(w, "error", struct{ Status, Page string }{Status: status, Page: page})
 	} else {
 		//Вытягивание строки из БД по логину и проверка с введенным паролем
 		res := db.DbConnect().QueryRow(fmt.Sprintf("SELECT * FROM `autentification` WHERE `login`='%s'", login))
@@ -208,7 +213,8 @@ func verification(w http.ResponseWriter, r *http.Request) {
 		err := res.Scan(&inf.Id, &inf.Login, &inf.Password)
 		if err != nil {
 			status := fmt.Sprintf("Пользователь %s не зарегистрирован", login)
-			tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+			page := "/autorisation"
+			tmp.ExecuteTemplate(w, "error", struct{ Status, Page string }{Status: status, Page: page})
 		} else {
 			if inf.Password == password {
 				fmt.Println("Complete")
@@ -216,14 +222,15 @@ func verification(w http.ResponseWriter, r *http.Request) {
 				tmp.ExecuteTemplate(w, "ok", struct{ Status string }{Status: status})
 			} else {
 				status := "Сочетание логина и пароля не верны!"
-				tmp.ExecuteTemplate(w, "error", struct{ Status string }{Status: status})
+				page := "/autorisation"
+				tmp.ExecuteTemplate(w, "error", struct{ Status, Page string }{Status: status, Page: page})
 			}
 		}
 	}
 }
 
 func handleFuncs() {
-	port := os.Getenv("PORT")
+	//port := os.Getenv("PORT")
 	rout := mux.NewRouter()
 
 	//rout.HandleFunc("/output", outputJson)
@@ -243,7 +250,7 @@ func handleFuncs() {
 
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	http.ListenAndServe(":"+port, nil)
+	//http.ListenAndServe(":"+port, nil)
 	http.ListenAndServe(":8080", nil)
 }
 func main() {
