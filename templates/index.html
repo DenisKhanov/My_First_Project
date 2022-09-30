@@ -3,7 +3,7 @@
 <main>
     {{ range. }}
     <div class="position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
-         style="width: 96%; height: 400px; border-radius: 21px 21px 21px 21px;">
+         style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
         <div class=" p-lg-5 mx-auto my-5">
             <h1 class="display-5 fw-normal"> {{.Title}}</h1>
             <p class="lead fw-normal">{{.Anons}}</p>
@@ -14,7 +14,7 @@
     </div>
     {{else}}
     <div class="position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
-         style="width: 96%; height: 300px; border-radius: 21px 21px 21px 21px;">
+         style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
         <p class="lead">Тут совсем пусто, добавьте хоть одну статью :)</p>
         <a href="/create" class="btn btn-lg btn-success ">Создать статью</a>
     </div>
