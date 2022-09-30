@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	//"os"
 )
 
 type Article struct {
@@ -211,7 +212,9 @@ func handleFuncs() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
 
 	http.ListenAndServe(":"+port, nil)
+	//http.ListenAndServe(":8080", nil)
 }
+
 func main() {
 	handleFuncs()
 }
