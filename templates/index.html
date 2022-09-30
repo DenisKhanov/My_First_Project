@@ -2,15 +2,19 @@
 {{ template "header" }}
 <main>
     {{ range. }}
-    <div class="position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
+<!--    Фоновая фигура с настройками скругления и прозрачности-->
+    <div class=" shadow position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
          style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
-        <div class=" p-lg-5 mx-auto my-5">
+        <div class="p-lg-5 mx-auto my-5">
             <h1 class="display-5 fw-normal"> {{.Title}}</h1>
-            <p class="lead fw-normal">{{.Anons}}</p>
-            <a class="btn btn-outline-secondary" href="/post/{{.Id}}">Прочитать подробнее</a>
+<!--            Полоса прокрутки-->
+            <div class="overflow-auto">
+                <p class="lead fw-normal">{{.Anons}}</p>
+            </div>
+            <a class="shadow btn btn-outline-secondary" href="/post/{{.Id}}">Прочитать подробнее</a>
         </div>
-        <div class="product-device shadow d-none d-block"></div>
-        <div class="product-device product-device-2 shadow d-none d-block"></div>
+        <div class="product-device shadow d-block"></div>
+        <div class="product-device product-device-2 shadow d-block"></div>
     </div>
     {{else}}
     <div class="position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
