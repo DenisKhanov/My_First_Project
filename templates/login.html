@@ -3,12 +3,18 @@
 <main role="main" class="inner cover">
     <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light bg-gradient bg-opacity-75"
          style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
-        <h3 class="cover-handing">Registration new user</h3>
+        <h3 class="cover-handing">Регистрация нового пользователя</h3>
         <form action="/add_user" method="post">
             <input type="text" name="login" id="login" placeholder="Придумайте себе логин"
-                   class="form-control"><br>
+                   class="form-control">
+            <div  class="form-text" align="left">
+                 Логин не должен быть короче 4-х символов
+            </div><br>
             <textarea name="password" id="password" class="form-control"
-                      placeholder="Придумайте пароль"></textarea><br>
+                      placeholder="Придумайте пароль"></textarea>
+            <div class="form-text" align="left">
+                 Пароль не должен быть короче 4-х символов
+            </div><br>
             <button class="btn btn-warning">Создать учетную запись</button>
         </form>
     </div>

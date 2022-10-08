@@ -8,7 +8,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
-	//"os"
+	"strconv"
 )
 
 type Article struct {
@@ -24,6 +24,7 @@ type Users struct {
 var posts = []Article{}
 var showPost = Article{}
 
+//Главная страница
 func index(w http.ResponseWriter, r *http.Request) {
 	tmp, err := template.ParseFiles("templates/index.html", "templates/header.html", "templates/footer.html")
 	if err != nil {
@@ -47,6 +48,53 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 	tmp.ExecuteTemplate(w, "index", posts)
 
+}
+
+//Редактирование статьи
+func edit(w http.ResponseWriter, r *http.Request) {
+	tmp, err := template.ParseFiles("templates/edit.html", "templates/header.html", "templates/footer.html")
+	if err != nil {
+		fmt.Fprintf(w, err.Error())
+	}
+	var post Article
+	id := r.URL.Query().Get("id")
+	post.Id, _ = strconv.Atoi(id)
+	tmp.ExecuteTemplate(w, "edit", post)
+
+}
+func edit_post(w http.ResponseWriter, r *http.Request) {
+	var list []string = make([]string, 4)
+	list[0] = r.URL.Query().Get("id")
+	list[1] = r.FormValue("title")
+	list[2] = r.FormValue("anons")
+	list[3] = r.FormValue("full_text")
+
+	//Изменение данных
+	defer db.DbConnect().Close()
+	for i := 0; i < 4; i++ {
+		if list[1] != "" {
+			insert, err := db.DbConnect().Query(fmt.Sprintf("UPDATE `articles` SET `title`='%s' WHERE `id`='%s'", list[1], list[0]))
+			if err != nil {
+				panic(err)
+			}
+			defer insert.Close()
+		}
+		if list[2] != "" {
+			insert, err := db.DbConnect().Query(fmt.Sprintf("UPDATE `articles` SET `anons`='%s' WHERE `id`='%s'", list[2], list[0]))
+			if err != nil {
+				panic(err)
+			}
+			defer insert.Close()
+		}
+		if list[3] != "" {
+			insert, err := db.DbConnect().Query(fmt.Sprintf("UPDATE `articles` SET `full_text`='%s' WHERE `id`='%s'", list[3], list[0]))
+			if err != nil {
+				panic(err)
+			}
+			defer insert.Close()
+		}
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 //Создание статьи
@@ -82,6 +130,7 @@ func save_article(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Развернутый просмотр статьи
 func wiewPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	w.WriteHeader(http.StatusOK)
@@ -106,6 +155,21 @@ func wiewPost(w http.ResponseWriter, r *http.Request) {
 		showPost = post
 	}
 	tmp.ExecuteTemplate(w, "show", showPost)
+}
+
+//Удаление статьи
+func delete(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get("id")
+
+	//Изменение данных
+	defer db.DbConnect().Close()
+	insert, err := db.DbConnect().Query(fmt.Sprintf("DELETE FROM `articles` WHERE `id`='%s'", id))
+	if err != nil {
+		panic(err)
+	}
+	defer insert.Close()
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 //Регистрация пользователя
@@ -207,6 +271,10 @@ func handleFuncs() {
 	rout.HandleFunc("/create", create).Methods("GET")
 	rout.HandleFunc("/save_article", save_article).Methods("POST")
 	rout.HandleFunc("/post/{id:[0-9]+}", wiewPost).Methods("GET")
+
+	rout.HandleFunc("/edit", edit).Methods("GET")
+	rout.HandleFunc("/edit_post", edit_post).Methods("GET", "POST")
+	rout.HandleFunc("/delete", delete).Methods("GET")
 
 	http.Handle("/", rout)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
