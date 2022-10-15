@@ -1,0 +1,18 @@
+{{ define "edit" }}
+{{ template "header" }}
+<main role="main" class="inner cover">
+    <div class="position-relative overflow-auto p-3 p-md-5 m-md-3
+    text-center bg-light bg-gradient bg-opacity-75"
+         style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
+        <h1 class="cover-handing">Редактировать статью </h1>
+        <form action="/edit_post/post/{{.Id}}" method="post">
+            <input type="text" name="title" id="title" class="form-control" value="{{.Title}}"><br>
+            <input type="text" name="anons" id="anons" class="form-control" value="{{.Anons}}"><br>
+            <input type="text" name="full_text" id="full_text" class="form-control " value="{{.FullText}}"><br>
+            <a href="/post/{{.Id}}" class="shadow btn btn-outline-secondary">Назад</a>
+            <button class="btn btn-warning">Редактировать</button>
+        </form>
+    </div>
+</main>
+{{ template "footer" }}
+{{ end }}

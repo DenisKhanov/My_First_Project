@@ -2,19 +2,26 @@
 {{ template "header" }}
 <main>
     {{ range. }}
-    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light bg-gradient bg-opacity-75"
-         style="width: 96%; height: 400px; border-radius: 21px 21px 21px 21px;">
-        <div class="col-md-5 p-lg-5 mx-auto my-5">
+    <!--    Фоновая фигура с настройками скругления и прозрачности-->
+    <div class=" shadow position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
+         style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
+        <div class="p-lg-5 mx-auto my-5">
             <h1 class="display-5 fw-normal"> {{.Title}}</h1>
-            <p class="lead fw-normal">{{.Anons}}</p>
-            <a class="btn btn-outline-secondary" href="/post/{{.Id}}">Прочитать подробнее</a>
+            <!--            Полоса прокрутки-->
+            <div class="overflow-auto">
+                <p class="lead fw-normal">{{.Anons}}</p>
+            </div>
+            <a class="shadow btn btn-outline-secondary" href="/post/{{.Id}}">Прочитать подробнее</a><br>
+        </div><br>
+        <div class="form-text" align="left">
+            Последняя дата изменения: {{.UpdatedAt}}
         </div>
-        <div class="product-device shadow-sm d-none d-md-block"></div>
-        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+        <div class="product-device shadow d-block"></div>
+        <div class="product-device product-device-2 shadow d-block"></div>
     </div>
     {{else}}
-    <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light bg-gradient bg-opacity-75"
-         style="width: 96%; height: 300px; border-radius: 21px 21px 21px 21px;">
+    <div class="position-relative overflow-hidden p-3 p-5 m-3 text-center bg-light bg-gradient bg-opacity-75"
+         style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
         <p class="lead">Тут совсем пусто, добавьте хоть одну статью :)</p>
         <a href="/create" class="btn btn-lg btn-success ">Создать статью</a>
     </div>
