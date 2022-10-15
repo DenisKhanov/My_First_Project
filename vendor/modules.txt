@@ -7,11 +7,19 @@
 github.com/go-sql-driver/mysql
 # github.com/gobuffalo/flect v0.2.4
 ## explicit; go 1.13
+# github.com/golang-jwt/jwt/v4 v4.4.2
+## explicit; go 1.16
 # github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 ## explicit; go 1.13
 # github.com/gorilla/mux v1.8.0
 ## explicit; go 1.12
 github.com/gorilla/mux
+# github.com/jinzhu/inflection v1.0.0
+## explicit
+github.com/jinzhu/inflection
+# github.com/jinzhu/now v1.1.5
+## explicit; go 1.12
+github.com/jinzhu/now
 # github.com/kardianos/govendor v1.0.9
 ## explicit
 # github.com/pkg/errors v0.9.1
@@ -22,3 +30,15 @@ github.com/gorilla/mux
 ## explicit; go 1.17
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
+# gorm.io/driver/mysql v1.4.1
+## explicit; go 1.14
+gorm.io/driver/mysql
+# gorm.io/gorm v1.24.0
+## explicit; go 1.16
+gorm.io/gorm
+gorm.io/gorm/callbacks
+gorm.io/gorm/clause
+gorm.io/gorm/logger
+gorm.io/gorm/migrator
+gorm.io/gorm/schema
+gorm.io/gorm/utils

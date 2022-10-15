@@ -1,17 +1,24 @@
 package db
 
 import (
-	"database/sql"
+	"WWWgo/structs"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func DbConnect() *sql.DB {
-	db, err := sql.Open("mysql", "denisk:02Denis1990@tcp(81.90.182.182:3306)/mydb")
+func DbConnect() *gorm.DB {
+	db, err := gorm.Open(mysql.Open("denisk:Qwerty123@tcp(81.90.182.182:3320)/orm?parseTime=true"))
 	if err != nil {
-		fmt.Println("Error connect to data base!!!")
+		fmt.Println("Could not connect to Data Base")
 		panic(err)
 	}
-	fmt.Println("Connected to data base!")
 	return db
+}
+
+func InitialMigration() {
+	dataBase := DbConnect()
+
+	dataBase.AutoMigrate(&structs.Users{}, &structs.Article{})
+
 }

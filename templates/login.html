@@ -5,13 +5,13 @@
          style="width: 96%; height: auto; border-radius: 21px 21px 21px 21px;">
         <h3 class="cover-handing">Регистрация нового пользователя</h3>
         <form action="/add_user" method="post">
-            <input type="text" name="login" id="login" placeholder="Придумайте себе логин"
+            <input type="email" name="login" id="login" placeholder="Введите адрес почты"
                    class="form-control">
             <div  class="form-text" align="left">
-                 Логин не должен быть короче 4-х символов
+                 Email не должен быть короче 4-х символов
             </div><br>
-            <textarea name="password" id="password" class="form-control"
-                      placeholder="Придумайте пароль"></textarea>
+            <input type="password" name="password" id="password" placeholder="Придумайте пароль"
+                   class="form-control">
             <div class="form-text" align="left">
                  Пароль не должен быть короче 4-х символов
             </div><br>
