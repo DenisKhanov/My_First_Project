@@ -2,6 +2,8 @@
 ## explicit
 # github.com/dchest/safefile v0.0.0-20151022103144-855e8d98f185
 ## explicit
+# github.com/dgrijalva/jwt-go v3.2.0+incompatible
+## explicit
 # github.com/go-sql-driver/mysql v1.6.0
 ## explicit; go 1.10
 github.com/go-sql-driver/mysql
